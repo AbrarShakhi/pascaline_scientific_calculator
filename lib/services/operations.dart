@@ -1,13 +1,10 @@
 import 'dart:math';
-
+import 'stack_list.dart';
 import 'operator.dart';
 
 class Addition implements IOperator {
   @override
-  num action(num left, num right) => left + right;
-
-  @override
-  bool get isArithmetic => true;
+  num evaluteAction(num left, num right) => left + right;
 
   @override
   String toString() => "+";
@@ -16,15 +13,22 @@ class Addition implements IOperator {
   int get precendece => 1;
 
   @override
-  bool get isOperator => true;
+  void mutateToPostfix(
+    IToken token,
+    StackList<IToken> postfix,
+    StackList<IOperator> operatorStack,
+  ) {
+    while (operatorStack.isNotEmpty &&
+        operatorStack.top.precendece >= precendece) {
+      postfix.push(operatorStack.pop());
+    }
+    operatorStack.push(token as IOperator);
+  }
 }
 
 class Substraction implements IOperator {
   @override
-  num action(num left, num right) => left - right;
-
-  @override
-  bool get isArithmetic => true;
+  num evaluteAction(num left, num right) => left - right;
 
   @override
   String toString() => "-";
@@ -33,15 +37,22 @@ class Substraction implements IOperator {
   int get precendece => 1;
 
   @override
-  bool get isOperator => true;
+  void mutateToPostfix(
+    IToken token,
+    StackList<IToken> postfix,
+    StackList<IOperator> operatorStack,
+  ) {
+    while (operatorStack.isNotEmpty &&
+        operatorStack.top.precendece >= precendece) {
+      postfix.push(operatorStack.pop());
+    }
+    operatorStack.push(token as IOperator);
+  }
 }
 
 class Multiplication implements IOperator {
   @override
-  num action(num left, num right) => left * right;
-
-  @override
-  bool get isArithmetic => true;
+  num evaluteAction(num left, num right) => left * right;
 
   @override
   String toString() => "*";
@@ -50,15 +61,22 @@ class Multiplication implements IOperator {
   int get precendece => 2;
 
   @override
-  bool get isOperator => true;
+  void mutateToPostfix(
+    IToken token,
+    StackList<IToken> postfix,
+    StackList<IOperator> operatorStack,
+  ) {
+    while (operatorStack.isNotEmpty &&
+        operatorStack.top.precendece >= precendece) {
+      postfix.push(operatorStack.pop());
+    }
+    operatorStack.push(token as IOperator);
+  }
 }
 
 class Division implements IOperator {
   @override
-  num action(num left, num right) => left / right;
-
-  @override
-  bool get isArithmetic => true;
+  num evaluteAction(num left, num right) => left / right;
 
   @override
   String toString() => "/";
@@ -67,15 +85,22 @@ class Division implements IOperator {
   int get precendece => 2;
 
   @override
-  bool get isOperator => true;
+  void mutateToPostfix(
+    IToken token,
+    StackList<IToken> postfix,
+    StackList<IOperator> operatorStack,
+  ) {
+    while (operatorStack.isNotEmpty &&
+        operatorStack.top.precendece >= precendece) {
+      postfix.push(operatorStack.pop());
+    }
+    operatorStack.push(token as IOperator);
+  }
 }
 
 class Exponentiation implements IOperator {
   @override
-  num action(num left, num right) => pow(left, right);
-
-  @override
-  bool get isArithmetic => true;
+  num evaluteAction(num left, num right) => pow(left, right);
 
   @override
   String toString() => "^";
@@ -84,15 +109,23 @@ class Exponentiation implements IOperator {
   int get precendece => 3;
 
   @override
-  bool get isOperator => true;
+  void mutateToPostfix(
+    IToken token,
+    StackList<IToken> postfix,
+    StackList<IOperator> operatorStack,
+  ) {
+    while (operatorStack.isNotEmpty &&
+        operatorStack.top.precendece >= precendece) {
+      postfix.push(operatorStack.pop());
+    }
+    operatorStack.push(token as IOperator);
+  }
 }
 
-class OpenParentheses implements IOperator {
+class OpenParentheses implements IOperator, Parentheses {
   @override
-  num action(num left, num right) => 0;
+  num evaluteAction(num left, num right) => 0;
 
-  @override
-  bool get isArithmetic => false;
   @override
   String toString() => "(";
 
@@ -100,15 +133,21 @@ class OpenParentheses implements IOperator {
   int get precendece => 0;
 
   @override
-  bool get isOperator => true;
+  ParenthesesKind get kind => ParenthesesKind.open;
+
+  @override
+  void mutateToPostfix(
+    IToken token,
+    StackList<IToken> postfix,
+    StackList<IOperator> operatorStack,
+  ) {
+    operatorStack.push(token as OpenParentheses);
+  }
 }
 
-class CloseParentheses implements IOperator {
+class CloseParentheses implements IOperator, Parentheses {
   @override
-  num action(num left, num right) => 0;
-
-  @override
-  bool get isArithmetic => false;
+  num evaluteAction(num left, num right) => 0;
 
   @override
   String toString() => ")";
@@ -117,5 +156,20 @@ class CloseParentheses implements IOperator {
   int get precendece => 5;
 
   @override
-  bool get isOperator => true;
+  ParenthesesKind get kind => ParenthesesKind.close;
+
+  @override
+  void mutateToPostfix(
+    IToken token,
+    StackList<IToken> postfix,
+    StackList<IOperator> operatorStack,
+  ) {
+    while (operatorStack.isNotEmpty && operatorStack.top is! OpenParentheses) {
+      postfix.push(operatorStack.pop());
+    }
+
+    if (operatorStack.isNotEmpty && operatorStack.top is OpenParentheses) {
+      operatorStack.pop();
+    }
+  }
 }

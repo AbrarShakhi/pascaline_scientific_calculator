@@ -1,4 +1,6 @@
-import 'token.dart';
+import 'stack_list.dart';
+
+import 'operator.dart';
 
 class Operand implements IToken {
   final num? _value;
@@ -15,8 +17,14 @@ class Operand implements IToken {
   num get toNum => (_value != null) ? _value : 0;
 
   @override
-  bool get isOperator => false;
+  String toString() => (_isValid) ? _value.toString() : '';
 
   @override
-  String toString() => (_isValid) ? _value.toString() : '';
+  void mutateToPostfix(
+    IToken token,
+    StackList<IToken> postfix,
+    StackList<IOperator> operatorStack,
+  ) {
+    postfix.push(token as Operand);
+  }
 }
