@@ -15,7 +15,13 @@ abstract class IExpression {
 }
 
 class InfixExpression implements IExpression {
-  final StackList<IToken> _infix = StackList<IToken>();
+  final StackList<IToken> _infix;
+
+  InfixExpression.addInfix(this._infix);
+
+  factory InfixExpression() {
+    return InfixExpression.addInfix(StackList<IToken>());
+  }
 
   @override
   ExpressionKind get kind => ExpressionKind.infix;
@@ -48,6 +54,8 @@ class InfixExpression implements IExpression {
 
   @override
   List<IToken> get items => _infix.items;
+
+  IToken get last => _infix.top;
 
   StackList<IToken> toPostfix() {
     final postfix = StackList<IToken>();
