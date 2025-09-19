@@ -23,9 +23,9 @@ flutter:
   fonts:
     - family: JetBrainsMono
       fonts:
-        - asset: assets/fonts/JetBrainsMono-Bold.ttf
-          weight: 700
         - asset: assets/fonts/JetBrainsMono-ExtraLight.ttf
-          weight: 200
-        - asset: assets/fonts/JetBrainsMono-Light.ttf
-          weight: 300
+          weight: 200 # Extra Light weight
+        - asset: assets/fonts/JetBrainsMono-Regular.ttf
+          weight: 400 # Regular weight
+        - asset: assets/fonts/JetBrainsMono-SemiBold.ttf
+          weight: 600 # Semi Bold weight
