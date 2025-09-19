@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'data/theme_notifier.dart';
-import 'views/widget_tree.dart';
+import 'views/calculator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await loadThemePreference();
   runApp(const MainApp());
 }
 
@@ -18,17 +17,24 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   @override
-  Widget build(BuildContext context) => ValueListenableBuilder(
+  void initState() {
+    super.initState();
+    loadThemePreference();
+  }
+
+  @override
+  Widget build(BuildContext context) => ValueListenableBuilder<ThemeMode>(
     valueListenable: themeMode,
     builder: (context, themeMode, child) => MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        fontFamily: "JetBrainsMono",
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
         brightness: themeMode == ThemeMode.dark
             ? Brightness.dark
             : Brightness.light,
       ),
-      home: WidgetTree(),
+      home: const Calculator(),
     ),
   );
 }
