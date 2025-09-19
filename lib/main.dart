@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'data/notifier.dart';
+import 'data/theme_notifier.dart';
 import 'views/widget_tree.dart';
 
-void main() => runApp(const MainApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await loadThemePreference();
+  runApp(const MainApp());
+}
 
 class MainApp extends StatefulWidget {
   const MainApp({super.key});

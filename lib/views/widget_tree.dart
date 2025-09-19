@@ -5,5 +5,9 @@ class WidgetTree extends StatelessWidget {
   const WidgetTree({super.key});
 
   @override
-  Widget build(BuildContext context) => Scaffold(body: Calculator());
+  Widget build(BuildContext context) => Scaffold(
+    // TODO: appBar: Custome
+    body: Calculator(),
+    // TODO: bottomNavigationBar: Custome,
+  );
 }
