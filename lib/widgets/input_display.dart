@@ -9,5 +9,6 @@ class InputDisplay extends StatefulWidget {
 
 class _InputDisplayState extends State<InputDisplay> {
   @override
-  Widget build(BuildContext context) => Container(color: Colors.red);
+  Widget build(BuildContext context) =>
+      SizedBox(height: double.infinity, width: double.infinity);
 }
