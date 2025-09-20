@@ -124,7 +124,8 @@ class Exponentiation implements IOperator {
 
 class OpenParentheses implements IOperator, Parentheses {
   @override
-  num evaluteAction(num left, num right) => 0;
+  num evaluteAction(num left, num right) =>
+      throw Exception("Can not evalute 'Parentheses'");
 
   @override
   String toString() => "(";
@@ -147,7 +148,8 @@ class OpenParentheses implements IOperator, Parentheses {
 
 class CloseParentheses implements IOperator, Parentheses {
   @override
-  num evaluteAction(num left, num right) => 0;
+  num evaluteAction(num left, num right) =>
+      throw Exception("Can not evalute 'Parentheses'");
 
   @override
   String toString() => ")";

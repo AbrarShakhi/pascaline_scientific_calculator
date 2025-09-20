@@ -93,7 +93,7 @@ class PostExpression implements IExpression {
       if (token is IOperator) {
         final operator_ = token;
 
-        if (token is Parentheses) {
+        if (operator_ is Parentheses) {
           throw Exception("Invalid Operator '${operator_.toString()}'.");
         }
         if (results.length < 2) {
@@ -106,12 +106,16 @@ class PostExpression implements IExpression {
         final left = results.pop();
 
         results.push(operator_.evaluteAction(left, right));
-      } else {
-        final operand = token as Operand;
+      } else if (token is Operand) {
+        final operand = token;
         if (!operand.isValid) {
           throw Exception("Invalid operand found.");
         }
         results.push(operand.toNum);
+      } else {
+        throw Exception(
+          "token has to be either 'Operand' or 'IOperator'. this block should not run.",
+        );
       }
     }
     if (results.length != 1) {
