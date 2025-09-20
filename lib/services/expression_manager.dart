@@ -4,21 +4,26 @@ import 'operator.dart';
 
 class ExpressionManager {
   InfixExpression _infixExpression;
-  StringBuffer _numberBuffer;
+  List<int> _numberBuffer;
 
   ExpressionManager._(this._infixExpression, this._numberBuffer);
 
   factory ExpressionManager() {
-    return ExpressionManager._(InfixExpression(), StringBuffer());
+    return ExpressionManager._(InfixExpression(), []);
   }
 
-  bool _registerNumbers() {
+  void _registerNumbers() {
     if (_numberBuffer.isEmpty) {
-      return false;
+      return;
     }
-    _infixExpression.addToken(Operand(_numberBuffer.toString()));
+
+    final stringBuffer = StringBuffer();
+    for (var charCode in _numberBuffer) {
+      stringBuffer.writeCharCode(charCode);
+    }
+
+    _infixExpression.addToken(Operand(stringBuffer.toString()));
     _numberBuffer.clear();
-    return true;
   }
 
   void allClear() {
@@ -26,10 +31,38 @@ class ExpressionManager {
     _numberBuffer.clear();
   }
 
-  void addOperator(IOperator op) {
-    _infixExpression.addToken(op);
+  void pushOperator(IOperator op) {
     _registerNumbers();
+    _infixExpression.addToken(op);
   }
 
-  num calculate() => PostfixExpression(_infixExpression).evaluate();
+  void pushSingleOperand(int char) {
+    _numberBuffer.add(char);
+  }
+
+  void popAny() {
+    if (_numberBuffer.isNotEmpty) {
+      _numberBuffer.removeLast();
+    }
+    // TODO:
+    // if _numberBuffer is emppty.
+    //      then its hight likely previous token in _infixExpression will be operator.
+    //      just need to pop that from _infixExpression. (make sure _infixExpression is not empty)
+    //
+    // if previous token from _infixExpression is not operator means operand (possibly invalid expression).
+    //      but need to test it.
+    //      if that happens then pop the operand from _infixExpression convert from string to int array.
+    //      remove the last value.
+    //      insert back as operator.
+    //      need a faster method
+  }
+
+  // TODO:
+  // cusror managemnet
+  // infix and postfix has to be modified for cursor management.
+
+  num calculate() {
+    _registerNumbers();
+    return PostfixExpression(_infixExpression).evaluate();
+  }
 }
