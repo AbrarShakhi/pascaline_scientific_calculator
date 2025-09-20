@@ -33,9 +33,9 @@ class _InputButtonsState extends State<InputButtons> {
       ),
       Row(
         children: [
+          // 00
           // 0
           // .
-          // <-
         ],
       ),
     ],
@@ -50,15 +50,33 @@ class _InputButtonsState extends State<InputButtons> {
     ],
   );
 
+  Widget _buildModPad() => Row(
+    // Mod
+    // <
+    // >
+    // <-
+    // AC
+  );
+
   @override
   Widget build(BuildContext context) {
-    return Column(children: [_buildNumberPad(), _buildOperatorPad()]);
+    return Row(
+      children: [
+        _buildModPad(),
+        Column(children: [_buildNumberPad(), _buildOperatorPad()]),
+      ],
+    );
   }
 }
 
 /*
-  7  8  9  (  )
-  4  5  6  *  /
-  1  2  3  +  -
-  0  .  <   ==
+  <  : cursor left
+  <  : cursor right
+  <- : remove last
+
+  MOD <   >   <-  AC
+  7   8   9   (   )
+  4   5   6   *   /
+  1   2   3   +   -
+  00  0   .     ==
 */
