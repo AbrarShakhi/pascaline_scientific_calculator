@@ -60,7 +60,7 @@ void main() {
       infix.addToken(Multiplication());
       infix.addToken(Operand('2'));
 
-      final post = PostExpression(infix);
+      final post = PostfixExpression(infix);
       final result = post.evaluate();
       expect(result, equals(11)); // 3 + (4 * 2)
     });
@@ -71,7 +71,7 @@ void main() {
       infix.addToken(Exponentiation());
       infix.addToken(Operand('3')); // 2^3 = 8
 
-      final post = PostExpression(infix);
+      final post = PostfixExpression(infix);
       expect(post.evaluate(), equals(8));
     });
 
@@ -79,7 +79,7 @@ void main() {
       final infix = InfixExpression();
       infix.addToken(Operand('abc')); // invalid
 
-      final expr = PostExpression(infix);
+      final expr = PostfixExpression(infix);
 
       expect(
         () => expr.evaluate(),
@@ -95,7 +95,7 @@ void main() {
       final infix = InfixExpression();
       infix.addToken(Addition()); // No operands
 
-      final expr = PostExpression(infix);
+      final expr = PostfixExpression(infix);
 
       expect(
         () => expr.evaluate(),
@@ -113,7 +113,7 @@ void main() {
       final infix = InfixExpression();
       infix.addToken(OpenParentheses());
 
-      final expr = PostExpression(infix);
+      final expr = PostfixExpression(infix);
 
       expect(
         () => expr.evaluate(),
@@ -130,7 +130,7 @@ void main() {
       infix.addToken(Operand('2'));
       infix.addToken(Operand('3')); // Missing operator
 
-      final expr = PostExpression(infix);
+      final expr = PostfixExpression(infix);
 
       expect(
         () => expr.evaluate(),
@@ -148,7 +148,7 @@ void main() {
       infix.addToken(Operand('2'));
       infix.addToken(Addition());
 
-      final expr = PostExpression(infix);
+      final expr = PostfixExpression(infix);
 
       // Postfix: 1 2 + => toString reverses: "+21"
       expect(expr.toString(), equals('+21'));

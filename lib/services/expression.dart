@@ -9,6 +9,7 @@ abstract class IExpression {
   num evaluate();
   void addToken(IToken tok);
   IToken removeToken();
+  void clear();
   bool get isEmpty;
   int get length;
   List<IToken> get items;
@@ -36,6 +37,9 @@ class InfixExpression implements IExpression {
 
   @override
   IToken removeToken() => _infix.pop();
+
+  @override
+  void clear() => _infix.clear();
 
   @override
   bool get isEmpty => _infix.isEmpty;
@@ -73,13 +77,13 @@ class InfixExpression implements IExpression {
   }
 }
 
-class PostExpression implements IExpression {
+class PostfixExpression implements IExpression {
   final StackList<IToken> _postfix;
 
-  PostExpression._(this._postfix);
+  PostfixExpression._(this._postfix);
 
-  factory PostExpression(InfixExpression infix) {
-    return PostExpression._(infix.toPostfix());
+  factory PostfixExpression(InfixExpression infix) {
+    return PostfixExpression._(infix.toPostfix());
   }
 
   @override
@@ -129,6 +133,9 @@ class PostExpression implements IExpression {
 
   @override
   IToken removeToken() => _postfix.pop();
+
+  @override
+  void clear() => _postfix.clear();
 
   @override
   bool get isEmpty => _postfix.isEmpty;

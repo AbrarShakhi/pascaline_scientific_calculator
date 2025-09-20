@@ -3,6 +3,7 @@ class StackList<E> {
 
   void push(E element) => _storage.add(element);
   E pop() => _storage.removeLast();
+  void clear() => _storage.clear();
   E get top => _storage.last;
   bool get isEmpty => _storage.isEmpty;
   bool get isNotEmpty => _storage.isNotEmpty;
