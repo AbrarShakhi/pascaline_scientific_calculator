@@ -7,7 +7,7 @@ void main() {
   group('InfixExpression', () {
     test('addToken and removeToken work as expected', () {
       final expr = InfixExpression();
-      final operand = Operand('5');
+      final operand = Operand.fromString('5');
 
       expr.pushToken(operand);
       expect(expr.isEmpty, isFalse);
@@ -21,26 +21,36 @@ void main() {
     test('toPostfix converts infix to correct postfix order', () {
       final expr = InfixExpression();
 
-      // Infix: 2 + 3
-      expr.pushToken(Operand('2'));
+      // Infix: 2, +, (,3.7, -, 5,), *, 4
+      expr.pushToken(Operand.fromString('2'));
       expr.pushToken(Addition());
-      expr.pushToken(Operand('3'));
+      expr.pushToken(OpenParentheses());
+      expr.pushToken(Operand.fromList([51, 46, 55]));
+      expr.pushToken(Substraction());
+      expr.pushToken(Operand.fromString('5'));
+      expr.pushToken(CloseParentheses());
+      expr.pushToken(Multiplication());
+      expr.pushToken(Operand.fromString('4'));
 
       final postfix = expr.toPostfix();
       final postfixTokens = postfix;
 
-      // Should be: 2 3 +
-      expect(postfixTokens.length, 3);
+      // Should be: 2, 3.7, 5, -, 4, *, +
+      expect(postfixTokens.length, 7);
       expect(postfixTokens[0].toString(), '2');
-      expect(postfixTokens[1].toString(), '3');
-      expect(postfixTokens[2].toString(), '+');
+      expect(postfixTokens[1].toString(), '3.7');
+      expect(postfixTokens[2].toString(), '5');
+      expect(postfixTokens[3].toString(), '-');
+      expect(postfixTokens[4].toString(), '4');
+      expect(postfixTokens[5].toString(), '*');
+      expect(postfixTokens[6].toString(), '+');
     });
 
     test('toString returns correct infix string', () {
       final expr = InfixExpression();
-      expr.pushToken(Operand('4'));
+      expr.pushToken(Operand.fromString('4'));
       expr.pushToken(Multiplication());
-      expr.pushToken(Operand('5'));
+      expr.pushToken(Operand.fromString('5'));
 
       expect(expr.toString(), '4*5');
     });
@@ -54,11 +64,11 @@ void main() {
   group('PostExpression', () {
     test('evaluate returns correct result for simple expression', () {
       final infix = InfixExpression();
-      infix.pushToken(Operand('3'));
+      infix.pushToken(Operand.fromString('3'));
       infix.pushToken(Addition());
-      infix.pushToken(Operand('4'));
+      infix.pushToken(Operand.fromString('4'));
       infix.pushToken(Multiplication());
-      infix.pushToken(Operand('2'));
+      infix.pushToken(Operand.fromString('2'));
 
       final post = PostfixExpression(infix);
       final result = post.evaluate();
@@ -67,9 +77,9 @@ void main() {
 
     test('evaluate supports exponentiation', () {
       final infix = InfixExpression();
-      infix.pushToken(Operand('2'));
+      infix.pushToken(Operand.fromString('2'));
       infix.pushToken(Exponentiation());
-      infix.pushToken(Operand('3')); // 2^3 = 8
+      infix.pushToken(Operand.fromString('3')); // 2^3 = 8
 
       final post = PostfixExpression(infix);
       expect(post.evaluate(), equals(8));
@@ -77,7 +87,7 @@ void main() {
 
     test('evaluate with invalid operand throws exception', () {
       final infix = InfixExpression();
-      infix.pushToken(Operand('abc')); // invalid
+      infix.pushToken(Operand.fromString('abc')); // invalid
 
       final expr = PostfixExpression(infix);
 
@@ -127,8 +137,8 @@ void main() {
 
     test('evaluate with leftover stack throws exception', () {
       final infix = InfixExpression();
-      infix.pushToken(Operand('2'));
-      infix.pushToken(Operand('3')); // Missing operator
+      infix.pushToken(Operand.fromString('2'));
+      infix.pushToken(Operand.fromString('3')); // Missing operator
 
       final expr = PostfixExpression(infix);
 
@@ -144,8 +154,8 @@ void main() {
 
     test('toString returns correct postfix string', () {
       final infix = InfixExpression();
-      infix.pushToken(Operand('1'));
-      infix.pushToken(Operand('2'));
+      infix.pushToken(Operand.fromString('1'));
+      infix.pushToken(Operand.fromString('2'));
       infix.pushToken(Addition());
 
       final expr = PostfixExpression(infix);

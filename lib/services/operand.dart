@@ -6,9 +6,17 @@ class Operand implements IToken {
 
   Operand._(this._value, this._isValid);
 
-  factory Operand(String input) {
-    final parsedValue = num.tryParse(input);
+  factory Operand.fromString(String inputString) {
+    final parsedValue = num.tryParse(inputString);
     return Operand._(parsedValue, parsedValue != null);
+  }
+
+  factory Operand.fromList(List<int> inputList) {
+    final stringBuffer = StringBuffer();
+    for (final charCode in inputList) {
+      stringBuffer.writeCharCode(charCode);
+    }
+    return Operand.fromString("");
   }
 
   bool get isValid => _isValid;

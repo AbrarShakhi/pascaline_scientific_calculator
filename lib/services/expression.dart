@@ -18,10 +18,14 @@ abstract class IExpression {
 class InfixExpression implements IExpression {
   final List<IToken> _infix;
 
-  InfixExpression.addInfix(this._infix);
+  InfixExpression._(this._infix);
 
   factory InfixExpression() {
-    return InfixExpression.addInfix([]);
+    return InfixExpression._([]);
+  }
+
+  factory InfixExpression.infix(List<IToken> infix) {
+    return InfixExpression._(infix);
   }
 
   @override
