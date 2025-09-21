@@ -1,68 +1,56 @@
-import 'operand.dart';
-import 'expression.dart';
 import 'operator.dart';
+import 'expression.dart';
+import 'operand.dart';
 
 class ExpressionManager {
-  InfixExpression _infixExpression;
-  List<int> _numberBuffer;
+  final InfixExpression _expression;
+  final List<int> _operandBuffer = [];
 
-  ExpressionManager._(this._infixExpression, this._numberBuffer);
+  ExpressionManager._(this._expression);
 
   factory ExpressionManager() {
-    return ExpressionManager._(InfixExpression(), []);
+    return ExpressionManager._(InfixExpression());
   }
 
-  void _registerNumbers() {
-    if (_numberBuffer.isEmpty) {
-      return;
+  void clear() {
+    _expression.clear();
+    _operandBuffer.clear();
+  }
+
+  static Operand _makeOperand(List<int> operandBuffer) {
+    final operand = Operand.fromList(operandBuffer);
+    operandBuffer.clear();
+    return operand;
+  }
+
+  void parseInfix(String inputString) {
+    if (_expression.isNotEmpty) {
+      throw Exception("Expression is already parsed. clear it to parse a new.");
     }
 
-    final stringBuffer = StringBuffer();
-    for (var charCode in _numberBuffer) {
-      stringBuffer.writeCharCode(charCode);
+    _operandBuffer.clear();
+    for (final roune in inputString.runes) {
+      IOperator? operator_;
+
+      try {
+        operator_ = IOperator.findChild(roune);
+      } catch (e) {
+        _operandBuffer.add(roune);
+      }
+
+      if (operator_ != null) {
+        if (_operandBuffer.isNotEmpty) {
+          _expression.pushToken(_makeOperand(_operandBuffer));
+        }
+        _expression.pushToken(operator_);
+      }
+      operator_ = null;
     }
 
-    _infixExpression.pushToken(Operand(stringBuffer.toString()));
-    _numberBuffer.clear();
+    _expression.pushToken(_makeOperand(_operandBuffer));
   }
-
-  void allClear() {
-    _infixExpression.clear();
-    _numberBuffer.clear();
-  }
-
-  void pushOperator(IOperator op) {
-    _registerNumbers();
-    _infixExpression.pushToken(op);
-  }
-
-  void pushSingleOperand(int char) {
-    _numberBuffer.add(char);
-  }
-
-  void popAny() {
-    if (_numberBuffer.isNotEmpty) {
-      _numberBuffer.removeLast();
-    }
-    // TODO:
-    // if _numberBuffer is emppty.
-    //      then its hight likely previous token in _infixExpression will be operator.
-    //      just need to pop that from _infixExpression. (make sure _infixExpression is not empty)
-    //
-    // if previous token from _infixExpression is not operator means operand (possibly invalid expression).
-    //      but need to test it.
-    //      if that happens then pop the operand from _infixExpression convert from string to int array.
-    //      remove the last value.
-    //      insert back as operator.
-    //      need a faster method
-  }
-
-  // TODO:
-  // cusror managemnet
-  // infix and postfix has to be modified for cursor management.
 
   num calculate() {
-    _registerNumbers();
-    return PostfixExpression(_infixExpression).evaluate();
+    return PostfixExpression(_expression).evaluate();
   }
 }
