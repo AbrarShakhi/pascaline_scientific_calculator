@@ -17,6 +17,10 @@ class ExpressionManager {
     _operandBuffer.clear();
   }
 
+  List<IToken> get expression => _expression.items;
+
+  bool get isParsed => _expression.isNotEmpty;
+
   static Operand _makeOperand(List<int> operandBuffer) {
     final operand = Operand.fromList(operandBuffer);
     operandBuffer.clear();
@@ -27,10 +31,17 @@ class ExpressionManager {
     if (_expression.isNotEmpty) {
       throw Exception("Expression is already parsed. clear it to parse a new.");
     }
+    if (inputString.isEmpty) {
+      _expression.pushToken(Operand.fromString('0'));
+    }
 
     _operandBuffer.clear();
     for (final roune in inputString.runes) {
       IOperator? operator_;
+
+      if (String.fromCharCode(roune) == ' ') {
+        continue;
+      }
 
       try {
         operator_ = IOperator.findChild(roune);
@@ -46,8 +57,9 @@ class ExpressionManager {
       }
       operator_ = null;
     }
-
-    _expression.pushToken(_makeOperand(_operandBuffer));
+    if (_operandBuffer.isNotEmpty) {
+      _expression.pushToken(_makeOperand(_operandBuffer));
+    }
   }
 
   num calculate() {
