@@ -10,6 +10,7 @@ abstract class IExpression {
   IToken popToken();
   void clear();
   bool get isEmpty;
+  bool get isNotEmpty;
   int get length;
   List<IToken> get items;
   IToken get last;
@@ -47,6 +48,9 @@ class InfixExpression implements IExpression {
 
   @override
   bool get isEmpty => _infix.isEmpty;
+
+  @override
+  bool get isNotEmpty => _infix.isNotEmpty;
 
   @override
   int get length => _infix.length;
@@ -144,6 +148,9 @@ class PostfixExpression implements IExpression {
 
   @override
   bool get isEmpty => _postfix.isEmpty;
+
+  @override
+  bool get isNotEmpty => _postfix.isNotEmpty;
 
   @override
   int get length => _postfix.length;

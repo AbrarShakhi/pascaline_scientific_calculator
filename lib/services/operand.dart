@@ -7,6 +7,9 @@ class Operand implements IToken {
   Operand._(this._value, this._isValid);
 
   factory Operand.fromString(String inputString) {
+    if (inputString.isEmpty) {
+      return Operand._(0, true);
+    }
     final parsedValue = num.tryParse(inputString);
     return Operand._(parsedValue, parsedValue != null);
   }
@@ -16,7 +19,7 @@ class Operand implements IToken {
     for (final charCode in inputList) {
       stringBuffer.writeCharCode(charCode);
     }
-    return Operand.fromString("");
+    return Operand.fromString(stringBuffer.toString());
   }
 
   bool get isValid => _isValid;
