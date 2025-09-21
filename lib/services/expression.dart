@@ -1,4 +1,3 @@
-import 'stack_list.dart';
 import 'operand.dart';
 import 'operator.dart';
 
@@ -7,21 +6,22 @@ enum ExpressionKind { infix, postfix }
 abstract class IExpression {
   ExpressionKind get kind;
   num evaluate();
-  void addToken(IToken tok);
-  IToken removeToken();
+  void pushToken(IToken tok);
+  IToken popToken();
   void clear();
   bool get isEmpty;
   int get length;
   List<IToken> get items;
+  IToken get last;
 }
 
 class InfixExpression implements IExpression {
-  final StackList<IToken> _infix;
+  final List<IToken> _infix;
 
   InfixExpression.addInfix(this._infix);
 
   factory InfixExpression() {
-    return InfixExpression.addInfix(StackList<IToken>());
+    return InfixExpression.addInfix([]);
   }
 
   @override
@@ -33,10 +33,10 @@ class InfixExpression implements IExpression {
   }
 
   @override
-  void addToken(IToken tok) => _infix.push(tok);
+  void pushToken(IToken tok) => _infix.add(tok);
 
   @override
-  IToken removeToken() => _infix.pop();
+  IToken popToken() => _infix.removeLast();
 
   @override
   void clear() => _infix.clear();
@@ -50,27 +50,28 @@ class InfixExpression implements IExpression {
   @override
   String toString() {
     var stringBuffer = StringBuffer();
-    for (var token in _infix.items) {
+    for (var token in _infix) {
       stringBuffer.write(token.toString());
     }
     return stringBuffer.toString();
   }
 
   @override
-  List<IToken> get items => _infix.items;
+  List<IToken> get items => List.unmodifiable(_infix);
 
-  IToken get last => _infix.top;
+  @override
+  IToken get last => _infix.last;
 
-  StackList<IToken> toPostfix() {
-    final postfix = StackList<IToken>();
-    final operatorStack = StackList<IOperator>();
+  List<IToken> toPostfix() {
+    List<IToken> postfix = [];
+    List<IOperator> operatorStack = [];
 
-    for (var token in _infix.items) {
+    for (var token in _infix) {
       token.mutateToPostfix(token, postfix, operatorStack);
     }
 
     while (operatorStack.isNotEmpty) {
-      postfix.push(operatorStack.pop());
+      postfix.add(operatorStack.removeLast());
     }
 
     return postfix;
@@ -78,7 +79,7 @@ class InfixExpression implements IExpression {
 }
 
 class PostfixExpression implements IExpression {
-  final StackList<IToken> _postfix;
+  final List<IToken> _postfix;
 
   PostfixExpression._(this._postfix);
 
@@ -91,9 +92,9 @@ class PostfixExpression implements IExpression {
 
   @override
   num evaluate() {
-    final StackList<num> results = StackList<num>();
+    final List<num> results = [];
 
-    for (var token in _postfix.items) {
+    for (var token in _postfix) {
       if (token is IOperator) {
         final operator_ = token;
 
@@ -106,16 +107,16 @@ class PostfixExpression implements IExpression {
           );
         }
 
-        final right = results.pop();
-        final left = results.pop();
+        final right = results.removeLast();
+        final left = results.removeLast();
 
-        results.push(operator_.evaluteAction(left, right));
+        results.add(operator_.evaluteAction(left, right));
       } else if (token is Operand) {
         final operand = token;
         if (!operand.isValid) {
           throw Exception("Invalid operand found.");
         }
-        results.push(operand.toNum);
+        results.add(operand.toNum);
       } else {
         throw Exception(
           "token has to be either 'Operand' or 'IOperator'. this block should not run.",
@@ -125,14 +126,14 @@ class PostfixExpression implements IExpression {
     if (results.length != 1) {
       throw Exception("Invalid postfix expression.");
     }
-    return results.top;
+    return results.last;
   }
 
   @override
-  void addToken(IToken tok) => _postfix.push(tok);
+  void pushToken(IToken tok) => _postfix.add(tok);
 
   @override
-  IToken removeToken() => _postfix.pop();
+  IToken popToken() => _postfix.removeLast();
 
   @override
   void clear() => _postfix.clear();
@@ -146,12 +147,15 @@ class PostfixExpression implements IExpression {
   @override
   String toString() {
     var stringBuffer = StringBuffer();
-    for (var token in _postfix.items.reversed) {
+    for (var token in _postfix.reversed) {
       stringBuffer.write(token.toString());
     }
     return stringBuffer.toString();
   }
 
   @override
-  List<IToken> get items => _postfix.items;
+  List<IToken> get items => List.unmodifiable(_postfix);
+
+  @override
+  IToken get last => _postfix.last;
 }

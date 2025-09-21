@@ -1,5 +1,3 @@
-import 'stack_list.dart';
-
 import 'operator.dart';
 
 class Operand implements IToken {
@@ -22,9 +20,9 @@ class Operand implements IToken {
   @override
   void mutateToPostfix(
     IToken token,
-    StackList<IToken> postfix,
-    StackList<IOperator> operatorStack,
+    List<IToken> postfix,
+    List<IOperator> operatorStack,
   ) {
-    postfix.push(token as Operand);
+    postfix.add(token as Operand);
   }
 }

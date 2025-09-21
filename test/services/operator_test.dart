@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pascaline_scientific_calculator/services/operator.dart';
-import 'package:pascaline_scientific_calculator/services/stack_list.dart';
 
 // Mock operator implementation
 class MockOperator implements IOperator {
@@ -19,11 +18,11 @@ class MockOperator implements IOperator {
   @override
   void mutateToPostfix(
     IToken token,
-    StackList<IToken> postfix,
-    StackList<IOperator> operatorStack,
+    List<IToken> postfix,
+    List<IOperator> operatorStack,
   ) {
     // Example behavior for testing
-    operatorStack.push(this);
+    operatorStack.add(this);
   }
 }
 
@@ -38,36 +37,36 @@ class MockToken implements IToken {
   @override
   void mutateToPostfix(
     IToken token,
-    StackList<IToken> postfix,
-    StackList<IOperator> operatorStack,
+    List<IToken> postfix,
+    List<IOperator> operatorStack,
   ) {
-    postfix.push(token);
+    postfix.add(token);
   }
 }
 
 void main() {
   group('Operator Tests', () {
     test('Operator precedence should return correct value', () {
-      final operator = MockOperator(5);
+      final operator_ = MockOperator(5);
 
-      expect(operator.precendece, 5);
+      expect(operator_.precendece, 5);
     });
 
     test('Operator evaluteAction should perform correct operation', () {
-      final operator = MockOperator(1);
+      final operator_ = MockOperator(1);
 
-      expect(operator.evaluteAction(3, 4), 7); // 3 + 4 = 7
+      expect(operator_.evaluteAction(3, 4), 7); // 3 + 4 = 7
     });
 
     test('mutateToPostfix should push operator to the operator stack', () {
-      final operator = MockOperator(1);
-      final postfix = StackList<IToken>();
-      final operatorStack = StackList<IOperator>();
+      final operator_ = MockOperator(1);
+      final List<IToken> postfix = [];
+      final List<IOperator> operatorStack = [];
 
-      operator.mutateToPostfix(MockToken(), postfix, operatorStack);
+      operator_.mutateToPostfix(MockToken(), postfix, operatorStack);
 
       expect(operatorStack.length, 1);
-      expect(operatorStack.top.precendece, 1); // Ensure the operator is pushed
+      expect(operatorStack.last.precendece, 1); // Ensure the operator is pushed
     });
   });
 
@@ -82,13 +81,16 @@ void main() {
   group('IToken mutateToPostfix Tests', () {
     test('mutateToPostfix should add token to postfix stack', () {
       final token = MockToken();
-      final postfix = StackList<IToken>();
-      final operatorStack = StackList<IOperator>();
+      final List<IToken> postfix = [];
+      final List<IOperator> operatorStack = [];
 
       token.mutateToPostfix(token, postfix, operatorStack);
 
       expect(postfix.length, 1);
-      expect(postfix.top, token); // The token should be pushed to postfix stack
+      expect(
+        postfix.last,
+        token,
+      ); // The token should be pushed to postfix stack
     });
   });
 }

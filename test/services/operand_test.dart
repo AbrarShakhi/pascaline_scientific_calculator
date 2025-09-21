@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pascaline_scientific_calculator/services/operator.dart';
-import 'package:pascaline_scientific_calculator/services/stack_list.dart';
 import 'package:pascaline_scientific_calculator/services/operand.dart';
 
 void main() {
@@ -31,13 +30,13 @@ void main() {
 
     test('mutateToPostfix should push itself to postfix stack', () {
       final operand = Operand('5');
-      final postfix = StackList<IToken>();
-      final operatorStack = StackList<IOperator>();
+      final List<IToken> postfix = [];
+      final List<IOperator> operatorStack = [];
 
       operand.mutateToPostfix(operand, postfix, operatorStack);
 
       expect(postfix.length, equals(1));
-      expect(postfix.top, equals(operand));
+      expect(postfix.last, equals(operand));
       expect(operatorStack.length, equals(0));
     });
   });

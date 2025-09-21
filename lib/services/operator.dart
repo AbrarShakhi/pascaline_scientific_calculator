@@ -1,10 +1,8 @@
-import 'stack_list.dart';
-
 abstract class IToken {
   void mutateToPostfix(
     IToken token,
-    StackList<IToken> postfix,
-    StackList<IOperator> operatorStack,
+    List<IToken> postfix,
+    List<IOperator> operatorStack,
   );
 }
 

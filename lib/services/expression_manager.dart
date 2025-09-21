@@ -22,7 +22,7 @@ class ExpressionManager {
       stringBuffer.writeCharCode(charCode);
     }
 
-    _infixExpression.addToken(Operand(stringBuffer.toString()));
+    _infixExpression.pushToken(Operand(stringBuffer.toString()));
     _numberBuffer.clear();
   }
 
@@ -33,7 +33,7 @@ class ExpressionManager {
 
   void pushOperator(IOperator op) {
     _registerNumbers();
-    _infixExpression.addToken(op);
+    _infixExpression.pushToken(op);
   }
 
   void pushSingleOperand(int char) {

@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pascaline_scientific_calculator/services/operator.dart';
-import 'package:pascaline_scientific_calculator/services/stack_list.dart';
 import 'package:pascaline_scientific_calculator/services/operations.dart';
 
 void main() {
@@ -57,44 +56,44 @@ void main() {
 
   group('mutateToPostfix Logic', () {
     test('Addition pushes to empty operator stack', () {
-      final postfix = StackList<IToken>();
-      final operatorStack = StackList<IOperator>();
+      final List<IToken> postfix = [];
+      final List<IOperator> operatorStack = [];
       final addition = Addition();
 
       addition.mutateToPostfix(addition, postfix, operatorStack);
 
       expect(postfix.isEmpty, isTrue);
-      expect(operatorStack.top, addition);
+      expect(operatorStack.last, addition);
     });
 
     test('Addition pops lower precedence operator from stack', () {
-      final postfix = StackList<IToken>();
-      final operatorStack = StackList<IOperator>();
+      final List<IToken> postfix = [];
+      final List<IOperator> operatorStack = [];
       final mult = Multiplication();
       final add = Addition();
 
-      operatorStack.push(mult); // Multiplication has higher precedence
+      operatorStack.add(mult); // Multiplication has higher precedence
 
       add.mutateToPostfix(add, postfix, operatorStack);
 
-      expect(postfix.top, mult);
-      expect(operatorStack.top, add);
+      expect(postfix.last, mult);
+      expect(operatorStack.last, add);
     });
 
     test('CloseParentheses pops until OpenParentheses', () {
-      final postfix = StackList<IToken>();
-      final operatorStack = StackList<IOperator>();
+      final List<IToken> postfix = [];
+      final List<IOperator> operatorStack = [];
 
       final open = OpenParentheses();
       final add = Addition();
       final close = CloseParentheses();
 
-      operatorStack.push(open);
-      operatorStack.push(add);
+      operatorStack.add(open);
+      operatorStack.add(add);
 
       close.mutateToPostfix(close, postfix, operatorStack);
 
-      expect(postfix.top, add);
+      expect(postfix.last, add);
       expect(operatorStack.isEmpty, isTrue);
     });
   });

@@ -9,11 +9,11 @@ void main() {
       final expr = InfixExpression();
       final operand = Operand('5');
 
-      expr.addToken(operand);
+      expr.pushToken(operand);
       expect(expr.isEmpty, isFalse);
       expect(expr.length, 1);
       expect(expr.last, operand);
-      final removed = expr.removeToken();
+      final removed = expr.popToken();
       expect(removed, operand);
       expect(expr.isEmpty, isTrue);
     });
@@ -22,12 +22,12 @@ void main() {
       final expr = InfixExpression();
 
       // Infix: 2 + 3
-      expr.addToken(Operand('2'));
-      expr.addToken(Addition());
-      expr.addToken(Operand('3'));
+      expr.pushToken(Operand('2'));
+      expr.pushToken(Addition());
+      expr.pushToken(Operand('3'));
 
       final postfix = expr.toPostfix();
-      final postfixTokens = postfix.items;
+      final postfixTokens = postfix;
 
       // Should be: 2 3 +
       expect(postfixTokens.length, 3);
@@ -38,9 +38,9 @@ void main() {
 
     test('toString returns correct infix string', () {
       final expr = InfixExpression();
-      expr.addToken(Operand('4'));
-      expr.addToken(Multiplication());
-      expr.addToken(Operand('5'));
+      expr.pushToken(Operand('4'));
+      expr.pushToken(Multiplication());
+      expr.pushToken(Operand('5'));
 
       expect(expr.toString(), '4*5');
     });
@@ -54,11 +54,11 @@ void main() {
   group('PostExpression', () {
     test('evaluate returns correct result for simple expression', () {
       final infix = InfixExpression();
-      infix.addToken(Operand('3'));
-      infix.addToken(Addition());
-      infix.addToken(Operand('4'));
-      infix.addToken(Multiplication());
-      infix.addToken(Operand('2'));
+      infix.pushToken(Operand('3'));
+      infix.pushToken(Addition());
+      infix.pushToken(Operand('4'));
+      infix.pushToken(Multiplication());
+      infix.pushToken(Operand('2'));
 
       final post = PostfixExpression(infix);
       final result = post.evaluate();
@@ -67,9 +67,9 @@ void main() {
 
     test('evaluate supports exponentiation', () {
       final infix = InfixExpression();
-      infix.addToken(Operand('2'));
-      infix.addToken(Exponentiation());
-      infix.addToken(Operand('3')); // 2^3 = 8
+      infix.pushToken(Operand('2'));
+      infix.pushToken(Exponentiation());
+      infix.pushToken(Operand('3')); // 2^3 = 8
 
       final post = PostfixExpression(infix);
       expect(post.evaluate(), equals(8));
@@ -77,7 +77,7 @@ void main() {
 
     test('evaluate with invalid operand throws exception', () {
       final infix = InfixExpression();
-      infix.addToken(Operand('abc')); // invalid
+      infix.pushToken(Operand('abc')); // invalid
 
       final expr = PostfixExpression(infix);
 
@@ -93,7 +93,7 @@ void main() {
 
     test('evaluate with insufficient operands throws exception', () {
       final infix = InfixExpression();
-      infix.addToken(Addition()); // No operands
+      infix.pushToken(Addition()); // No operands
 
       final expr = PostfixExpression(infix);
 
@@ -111,7 +111,7 @@ void main() {
 
     test('evaluate with parentheses throws exception', () {
       final infix = InfixExpression();
-      infix.addToken(OpenParentheses());
+      infix.pushToken(OpenParentheses());
 
       final expr = PostfixExpression(infix);
 
@@ -127,8 +127,8 @@ void main() {
 
     test('evaluate with leftover stack throws exception', () {
       final infix = InfixExpression();
-      infix.addToken(Operand('2'));
-      infix.addToken(Operand('3')); // Missing operator
+      infix.pushToken(Operand('2'));
+      infix.pushToken(Operand('3')); // Missing operator
 
       final expr = PostfixExpression(infix);
 
@@ -144,9 +144,9 @@ void main() {
 
     test('toString returns correct postfix string', () {
       final infix = InfixExpression();
-      infix.addToken(Operand('1'));
-      infix.addToken(Operand('2'));
-      infix.addToken(Addition());
+      infix.pushToken(Operand('1'));
+      infix.pushToken(Operand('2'));
+      infix.pushToken(Addition());
 
       final expr = PostfixExpression(infix);
 

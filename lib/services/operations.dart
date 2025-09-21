@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'stack_list.dart';
 import 'operator.dart';
 
 class Addition implements IOperator {
@@ -15,14 +14,14 @@ class Addition implements IOperator {
   @override
   void mutateToPostfix(
     IToken token,
-    StackList<IToken> postfix,
-    StackList<IOperator> operatorStack,
+    List<IToken> postfix,
+    List<IOperator> operatorStack,
   ) {
     while (operatorStack.isNotEmpty &&
-        operatorStack.top.precendece >= precendece) {
-      postfix.push(operatorStack.pop());
+        operatorStack.last.precendece >= precendece) {
+      postfix.add(operatorStack.removeLast());
     }
-    operatorStack.push(token as IOperator);
+    operatorStack.add(token as IOperator);
   }
 }
 
@@ -39,14 +38,14 @@ class Substraction implements IOperator {
   @override
   void mutateToPostfix(
     IToken token,
-    StackList<IToken> postfix,
-    StackList<IOperator> operatorStack,
+    List<IToken> postfix,
+    List<IOperator> operatorStack,
   ) {
     while (operatorStack.isNotEmpty &&
-        operatorStack.top.precendece >= precendece) {
-      postfix.push(operatorStack.pop());
+        operatorStack.last.precendece >= precendece) {
+      postfix.add(operatorStack.removeLast());
     }
-    operatorStack.push(token as IOperator);
+    operatorStack.add(token as IOperator);
   }
 }
 
@@ -63,14 +62,14 @@ class Multiplication implements IOperator {
   @override
   void mutateToPostfix(
     IToken token,
-    StackList<IToken> postfix,
-    StackList<IOperator> operatorStack,
+    List<IToken> postfix,
+    List<IOperator> operatorStack,
   ) {
     while (operatorStack.isNotEmpty &&
-        operatorStack.top.precendece >= precendece) {
-      postfix.push(operatorStack.pop());
+        operatorStack.last.precendece >= precendece) {
+      postfix.add(operatorStack.removeLast());
     }
-    operatorStack.push(token as IOperator);
+    operatorStack.add(token as IOperator);
   }
 }
 
@@ -87,14 +86,14 @@ class Division implements IOperator {
   @override
   void mutateToPostfix(
     IToken token,
-    StackList<IToken> postfix,
-    StackList<IOperator> operatorStack,
+    List<IToken> postfix,
+    List<IOperator> operatorStack,
   ) {
     while (operatorStack.isNotEmpty &&
-        operatorStack.top.precendece >= precendece) {
-      postfix.push(operatorStack.pop());
+        operatorStack.last.precendece >= precendece) {
+      postfix.add(operatorStack.removeLast());
     }
-    operatorStack.push(token as IOperator);
+    operatorStack.add(token as IOperator);
   }
 }
 
@@ -111,14 +110,14 @@ class Exponentiation implements IOperator {
   @override
   void mutateToPostfix(
     IToken token,
-    StackList<IToken> postfix,
-    StackList<IOperator> operatorStack,
+    List<IToken> postfix,
+    List<IOperator> operatorStack,
   ) {
     while (operatorStack.isNotEmpty &&
-        operatorStack.top.precendece >= precendece) {
-      postfix.push(operatorStack.pop());
+        operatorStack.last.precendece >= precendece) {
+      postfix.add(operatorStack.removeLast());
     }
-    operatorStack.push(token as IOperator);
+    operatorStack.add(token as IOperator);
   }
 }
 
@@ -139,10 +138,10 @@ class OpenParentheses implements IOperator, Parentheses {
   @override
   void mutateToPostfix(
     IToken token,
-    StackList<IToken> postfix,
-    StackList<IOperator> operatorStack,
+    List<IToken> postfix,
+    List<IOperator> operatorStack,
   ) {
-    operatorStack.push(token as OpenParentheses);
+    operatorStack.add(token as OpenParentheses);
   }
 }
 
@@ -163,15 +162,15 @@ class CloseParentheses implements IOperator, Parentheses {
   @override
   void mutateToPostfix(
     IToken token,
-    StackList<IToken> postfix,
-    StackList<IOperator> operatorStack,
+    List<IToken> postfix,
+    List<IOperator> operatorStack,
   ) {
-    while (operatorStack.isNotEmpty && operatorStack.top is! OpenParentheses) {
-      postfix.push(operatorStack.pop());
+    while (operatorStack.isNotEmpty && operatorStack.last is! OpenParentheses) {
+      postfix.add(operatorStack.removeLast());
     }
 
-    if (operatorStack.isNotEmpty && operatorStack.top is OpenParentheses) {
-      operatorStack.pop();
+    if (operatorStack.isNotEmpty && operatorStack.last is OpenParentheses) {
+      operatorStack.removeLast();
     }
   }
 }
