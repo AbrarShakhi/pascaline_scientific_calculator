@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../widgets/input_buttons.dart';
 import '../widgets/input_display.dart';
 
@@ -8,11 +7,17 @@ class Calculator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: Text("Standard"), centerTitle: true),
+    appBar: AppBar(title: const Text("Standard Calculator"), centerTitle: true),
     body: Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
-        children: [InputDisplay(), SizedBox(height: 20), InputButtons()],
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const InputDisplay(),
+          const SizedBox(height: 20),
+          Spacer(),
+          const InputButtons(),
+        ],
       ),
     ),
   );

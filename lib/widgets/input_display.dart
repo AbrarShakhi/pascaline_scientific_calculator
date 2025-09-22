@@ -8,7 +8,25 @@ class InputDisplay extends StatefulWidget {
 }
 
 class _InputDisplayState extends State<InputDisplay> {
+  String input = "0"; // Placeholder for user input
+
   @override
-  Widget build(BuildContext context) =>
-      SizedBox(height: double.infinity, width: double.infinity);
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Text(
+        input,
+        style: TextStyle(
+          fontSize: 40,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+        textAlign: TextAlign.right,
+      ),
+    );
+  }
 }
