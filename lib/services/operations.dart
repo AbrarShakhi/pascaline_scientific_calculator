@@ -75,7 +75,9 @@ class Multiplication implements IOperator {
 
 class Division implements IOperator {
   @override
-  num evaluteAction(num left, num right) => left / right;
+  num evaluteAction(num left, num right) {
+    return left / right;
+  }
 
   @override
   String toString() => "/";

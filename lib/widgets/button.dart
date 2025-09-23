@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 
+enum ButtonKind { number, operator_, modifier }
+
 class Button extends StatelessWidget {
-  final String label;
-  const Button({super.key, required this.label});
+  final String _label;
+  final VoidCallback _event;
+
+  const Button({super.key, required String label, required VoidCallback event})
+    : _label = label,
+      _event = event;
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: _event,
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 16.0),
           shape: RoundedRectangleBorder(
@@ -16,7 +22,7 @@ class Button extends StatelessWidget {
           ),
         ),
         child: Text(
-          label,
+          _label,
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
       ),
