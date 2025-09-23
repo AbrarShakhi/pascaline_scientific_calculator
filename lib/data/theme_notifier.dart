@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
 ValueNotifier<ThemeMode> themeMode = ValueNotifier(ThemeMode.system);
 
+/*
 Future<void> loadThemePreference() async {
   final prefs = await SharedPreferences.getInstance();
   final savedTheme = prefs.getString('themeMode') ?? 'system';
@@ -27,3 +28,4 @@ Future<void> saveThemePreference(ThemeMode mode) async {
     prefs.setString('themeMode', 'system');
   }
 }
+*/

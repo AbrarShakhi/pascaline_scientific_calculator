@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
-enum ButtonKind { number, operator_, modifier }
-
-class Button extends StatelessWidget {
+class DigitButton extends StatelessWidget {
   final String _label;
   final VoidCallback _event;
 
-  const Button({super.key, required String label, required VoidCallback event})
-    : _label = label,
-      _event = event;
+  const DigitButton({
+    super.key,
+    required String label,
+    required VoidCallback event,
+  }) : _label = label,
+       _event = event;
 
   @override
   Widget build(BuildContext context) {
