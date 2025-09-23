@@ -15,6 +15,9 @@ class NumberPad extends StatelessWidget {
     }
     if (new_ != '<-') {
       if (ExpressionHelpers.isZero(old)) {
+        if (old == '.') {
+          return "0.";
+        }
         return new_;
       } else {
         return old + new_;
