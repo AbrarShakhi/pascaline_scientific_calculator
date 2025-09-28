@@ -5,22 +5,25 @@ import '../services/expression_manager.dart';
 import '../widgets/buttons/digit_button.dart';
 import '../data/calculator_notifier.dart';
 
-class StandardCalculator extends StatelessWidget {
-  const StandardCalculator({super.key});
+class InputButtons extends StatelessWidget {
+  const InputButtons({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Expanded(child: NumberPad()),
-            Expanded(child: OperatorPad()),
-          ],
-        ),
-      ],
+    return SizedBox(
+      width: double.infinity,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(child: NumberPad()),
+              Expanded(child: OperatorPad()),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

@@ -3,14 +3,11 @@ import 'package:flutter/material.dart';
 import '../data/calculator_notifier.dart';
 import '../services/expression_helpers.dart';
 
-class OutputDisplay extends StatefulWidget {
-  const OutputDisplay({super.key});
+class OutputDisplay extends StatelessWidget {
+  final TextEditingController controller;
 
-  @override
-  State<OutputDisplay> createState() => _OutputDisplayState();
-}
+  const OutputDisplay({super.key, required this.controller});
 
-class _OutputDisplayState extends State<OutputDisplay> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<String>(
@@ -27,14 +24,17 @@ class _OutputDisplayState extends State<OutputDisplay> {
             color: Colors.grey[200],
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Text(
-            calculatorOutputValue,
-            style: TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
+          width: double.infinity,
+          height: double.infinity,
+          child: TextField(
+            controller: controller,
+            // calculatorOutputValue
+            style: TextStyle(fontSize: 40, fontWeight: FontWeight.w200),
             textAlign: TextAlign.right,
+            autofocus: true,
+            showCursor: false,
+            readOnly: true,
+            autocorrect: false,
           ),
         );
       },
